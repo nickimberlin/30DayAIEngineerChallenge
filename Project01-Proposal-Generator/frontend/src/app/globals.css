@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+:root {
+  --color-near-black: #0e0f0c;
+  --color-wise-green: #9fe870;
+  --color-dark-green: #163300;
+  --color-light-mint: #e2f6d5;
+  --color-pastel-green: #cdffad;
+  --color-positive-green: #054d28;
+  --color-danger-red: #d03238;
+  --color-warning-yellow: #ffd11a;
+  --color-bright-orange: #ffc091;
+  --color-warm-dark: #454745;
+  --color-gray: #868685;
+  --color-light-surface: #e8ebe6;
+  --color-background-accent: rgba(56, 200, 255, 0.10);
+
+  --font-display: 'Inter', 'Helvetica', 'Arial', sans-serif;
+  --font-body: 'Inter', 'Helvetica', 'Arial', sans-serif;
+
+  --spacing-base: 8px;
+
+  --radius-minimal: 2px;
+  --radius-standard: 10px;
+  --radius-card: 16px;
+  --radius-medium: 20px;
+  --radius-large: 30px;
+  --radius-section: 40px;
+  --radius-pill: 9999px;
+  --radius-circle: 50%;
+
+  --shadow-ring: rgba(14, 15, 12, 0.12) 0px 0px 0px 1px;
+  --shadow-inset: rgb(134, 134, 133) 0px 0px 0px 1px inset;
+
+  --color-background: #ffffff;
+  --color-foreground: #0e0f0c;
+}
+
+@theme inline {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-near-black: var(--color-near-black);
+  --color-wise-green: var(--color-wise-green);
+  --color-dark-green: var(--color-dark-green);
+  --color-light-mint: var(--color-light-mint);
+  --color-pastel-green: var(--color-pastel-green);
+  --color-positive-green: var(--color-positive-green);
+  --color-danger-red: var(--color-danger-red);
+  --color-warning-yellow: var(--color-warning-yellow);
+  --color-bright-orange: var(--color-bright-orange);
+  --color-warm-dark: var(--color-warm-dark);
+  --color-gray: var(--color-gray);
+  --color-light-surface: var(--color-light-surface);
+  --color-background-accent: var(--color-background-accent);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-body);
+}
+
+* {
+  font-feature-settings: 'calt' 1;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+  font-weight: 600;
+  line-height: 1.44;
+  letter-spacing: 0.18px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.display-text {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: normal;
+}
+
+.btn-primary {
+  background-color: var(--color-wise-green);
+  color: var(--color-dark-green);
+  padding: 5px 16px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: rgba(22, 51, 0, 0.08);
+  color: var(--color-near-black);
+  padding: 8px 12px 8px 16px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  transform: scale(1.05);
+  background: rgba(22, 51, 0, 0.12);
+}
+
+.btn-secondary:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.card {
+  border-radius: var(--radius-large);
+  border: 1px solid rgba(14, 15, 12, 0.12);
+  box-shadow: var(--shadow-ring);
+  padding: 24px;
+}
+
+.card-accent {
+  border-color: var(--color-wise-green);
+}
+
+.input {
+  border-radius: var(--radius-standard);
+  border: 1px solid rgba(14, 15, 12, 0.12);
+  padding: 10px 12px;
+  font-size: 16px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  background: white;
+  transition: box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: var(--shadow-inset);
+}
+
+.input::placeholder {
+  color: var(--color-gray);
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@media (max-width: 1023px) {
+  body {
+    padding-bottom: 0;
+  }
+}
