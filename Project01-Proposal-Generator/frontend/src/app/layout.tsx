@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Header } from "@/components/layout/Header";
+import { ToastProvider } from "@/components/ui/Toast";
 import "./globals.css";
 
 const inter = Inter({
@@ -24,7 +25,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col antialiased">
         <Header />
         <main className="flex-1">
-          {children}
+          <ToastProvider>{children}</ToastProvider>
         </main>
       </body>
     </html>

@@ -5,6 +5,9 @@ import { useParams } from 'next/navigation';
 import { ArrowLeft, Save, Download, Send, Pencil, Trash2, Menu } from 'lucide-react';
 import Link from 'next/link';
 import { Card, Button, Badge, Tabs, TabsList, TabsTrigger, TabsContent, Textarea } from '@/components/ui';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { useToast } from '@/components/ui/Toast';
+import { markdownToHtml } from '@/lib/pdf/markdown';
 import { useLocalStorage } from '@/hooks';
 import type { Proposal } from '@/types';
 
@@ -17,6 +20,17 @@ export default function ProposalEditorPage() {
   const firstTabId = overviewSection?.id || proposal?.sections[0]?.id || 'overview-0';
   const [activeSection, setActiveSection] = useState(firstTabId);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [editingSections, setEditingSections] = useState<Set<string>>(new Set());
+  const { showToast } = useToast();
+
+  const toggleEditMode = (sectionId: string) => {
+    setEditingSections(prev => {
+      const next = new Set(prev);
+      if (next.has(sectionId)) next.delete(sectionId);
+      else next.add(sectionId);
+      return next;
+    });
+  };
 
   if (!proposal) {
     return (
@@ -97,15 +111,44 @@ export default function ProposalEditorPage() {
             <div className="hidden sm:block">
               {getStatusBadge(proposal.status)}
             </div>
-            <Button variant="secondary" size="sm" className="hidden sm:flex">
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="hidden sm:flex"
+              onClick={() => {
+                updateProposal({});
+                showToast('Proposal saved successfully!');
+              }}
+            >
               <Save className="w-4 h-4" />
               <span className="hidden lg:inline">Save</span>
             </Button>
-            <Button variant="secondary" size="sm" className="hidden md:flex">
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="hidden md:flex"
+              onClick={() => {
+                const element = document.getElementById('proposal-preview-content');
+                if (element) {
+                  import('@/lib/pdf/generator').then(({ generateAndDownloadPDF }) => {
+                    generateAndDownloadPDF(proposal, element, {
+                      filename: `${proposal.title.replace(/\s+/g, '-').toLowerCase()}-proposal.pdf`,
+                    });
+                    showToast('PDF exported successfully!', 'success');
+                  });
+                } else {
+                  showToast('Unable to export PDF', 'error');
+                }
+              }}
+            >
               <Download className="w-4 h-4" />
               <span className="hidden lg:inline">Export PDF</span>
             </Button>
-            <Button size="sm" className="hidden sm:flex">
+            <Button 
+              size="sm" 
+              className="hidden sm:flex"
+              onClick={() => showToast('Email sending requires connected email service. Set up in Settings.', 'info')}
+            >
               <Send className="w-4 h-4" />
               <span className="hidden lg:inline">Send</span>
             </Button>
@@ -135,15 +178,26 @@ export default function ProposalEditorPage() {
                       <h2 className="text-lg sm:text-xl font-semibold text-[var(--color-near-black)]">
                         {section.title}
                       </h2>
-                      <Button variant="ghost" size="sm" className="p-1.5 sm:p-2">
-                        <Pencil className="w-4 h-4" />
+                      <Button 
+                        variant={editingSections.has(section.id) ? 'primary' : 'ghost'} 
+                        size="sm" 
+                        className="p-1.5 sm:p-2"
+                        onClick={() => toggleEditMode(section.id)}
+                      >
+                        {editingSections.has(section.id) ? <Save className="w-4 h-4" /> : <Pencil className="w-4 h-4" />}
                       </Button>
                     </div>
-                    <Textarea
-                      value={section.content}
-                      onChange={(e) => updateSection(section.id, e.target.value)}
-                      className="min-h-[200px] sm:min-h-[300px] font-mono text-sm"
-                    />
+                    {editingSections.has(section.id) ? (
+                      <Textarea
+                        value={section.content}
+                        onChange={(e) => updateSection(section.id, e.target.value)}
+                        className="min-h-[200px] sm:min-h-[300px] font-mono text-sm"
+                      />
+                    ) : (
+                      <div className="min-h-[200px] sm:min-h-[300px] p-3 sm:p-4 border border-[rgba(14,15,12,0.08)] rounded-lg bg-[rgba(14,15,12,0.02)]">
+                        <MarkdownRenderer content={section.content} />
+                      </div>
+                    )}
                   </Card>
                 </TabsContent>
               ))}
@@ -331,15 +385,31 @@ export default function ProposalEditorPage() {
             </Card>
 
             <div className="space-y-2">
-              <Button variant="secondary" className="w-full">
+              <Button variant="secondary" className="w-full" onClick={() => { updateProposal({}); showToast('Proposal saved successfully!'); }}>
                 <Save className="w-4 h-4" />
                 Save
               </Button>
-              <Button variant="secondary" className="w-full">
+              <Button variant="secondary" className="w-full" onClick={async () => {
+                try {
+                  const element = document.getElementById('proposal-pdf-preview');
+                  if (!element) {
+                    showToast('Unable to export PDF - element not found', 'error');
+                    return;
+                  }
+                  const { generateAndDownloadPDF } = await import('@/lib/pdf/generator');
+                  await generateAndDownloadPDF(proposal, element, {
+                    filename: `${proposal.title.replace(/\s+/g, '-').toLowerCase()}-proposal.pdf`,
+                  });
+                  showToast('PDF exported successfully!', 'success');
+                } catch (err) {
+                  console.error('PDF export error:', err);
+                  showToast('Unable to export PDF', 'error');
+                }
+              }}>
                 <Download className="w-4 h-4" />
                 Export PDF
               </Button>
-              <Button className="w-full">
+              <Button className="w-full" onClick={() => showToast('Email sending requires connected email service. Set up in Settings.', 'info')}>
                 <Send className="w-4 h-4" />
                 Send
               </Button>
@@ -347,6 +417,36 @@ export default function ProposalEditorPage() {
           </div>
         </div>
       )}
+      
+      <div id="proposal-pdf-preview" className="fixed -left-[9999px] top-0 w-[800px] bg-white">
+        <div style={{ padding: '40px', fontFamily: 'Inter, sans-serif', color: '#0e0f0c', background: '#ffffff' }}>
+          <div style={{ borderBottom: '2px solid #2563eb', paddingBottom: '20px', marginBottom: '30px' }}>
+            <h1 style={{ fontSize: '28px', fontWeight: '900', margin: 0 }}>{proposal.title}</h1>
+            <p style={{ fontSize: '14px', color: '#6b7280', marginTop: '4px' }}>Client: {proposal.clientName || 'Not specified'}</p>
+          </div>
+          {proposal.sections.map((section) => (
+            <div key={section.id} style={{ marginBottom: '24px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#2563eb', marginBottom: '10px' }}>{section.title}</h2>
+              <div 
+                    style={{ fontSize: '12px', lineHeight: '1.6' }}
+                    dangerouslySetInnerHTML={{ __html: markdownToHtml(section.content) }}
+                  />
+            </div>
+          ))}
+          <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px solid #e5e7eb' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '10px' }}>Pricing</h3>
+            {proposal.pricing.items.map((item) => (
+              <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '4px' }}>
+                <span>{item.description}</span>
+                <span>${item.total.toFixed(2)}</span>
+              </div>
+            ))}
+            <div style={{ fontWeight: '600', marginTop: '10px', fontSize: '14px' }}>
+              Total: ${proposal.pricing.total.toFixed(2)}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

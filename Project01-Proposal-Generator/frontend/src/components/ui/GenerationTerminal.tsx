@@ -35,15 +35,15 @@ export function GenerationTerminal({
   const getTypeColor = (type: LogEntry['type']) => {
     switch (type) {
       case 'success':
-        return 'text-green-600';
+        return 'text-[#054d28]';
       case 'error':
-        return 'text-red-600';
+        return 'text-[#d03238]';
       case 'warning':
-        return 'text-yellow-600';
+        return 'text-[#ffd11a]';
       case 'ai':
-        return 'text-cyan-600';
+        return 'text-[#163300]';
       default:
-        return 'text-gray-400';
+        return 'text-[#454745]';
     }
   };
 
@@ -60,38 +60,43 @@ export function GenerationTerminal({
     return (
       <button
         onClick={onToggle}
-        className="fixed bottom-4 right-4 z-50 flex items-center gap-2 px-4 py-3 bg-gray-800 hover:bg-gray-750 rounded-lg shadow-2xl border border-gray-700 transition-all"
+        className="fixed bottom-4 right-4 z-50 flex items-center gap-2 px-4 py-3 bg-[#9fe870] text-[#163300] rounded-full shadow-[rgba(14,15,12,0.12)_0px_0px_0px_1px] transition-all hover:scale-105 active:scale-95"
       >
-        <Terminal className="w-4 h-4 text-green-400" />
-        <span className="text-sm font-medium text-gray-200">View AI Logs</span>
+        <Terminal className="w-4 h-4" />
+        <span className="text-sm font-semibold">View AI Logs</span>
       </button>
     );
   }
 
   return (
     <div className="fixed bottom-4 right-4 z-50 w-96 max-w-[calc(100vw-2rem)]">
-      <div className="bg-gray-900 rounded-lg shadow-2xl border border-gray-700 overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 bg-gray-800">
-          <div className="flex items-center gap-2">
-            <Terminal className="w-4 h-4 text-green-400" />
-            <span className="text-sm font-medium text-gray-200">AI Generation Log</span>
+      <div className="bg-white rounded-[40px] shadow-[rgba(14,15,12,0.12)_0px_0px_0px_1px] border border-[rgba(14,15,12,0.12)] overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 bg-[#f5f7f4] rounded-t-[40px]">
+          <div className="flex items-center gap-3">
+            <Terminal className="w-5 h-5 text-[#163300]" />
+            <span className="text-base font-semibold text-[#0e0f0c]">AI Generation Log</span>
           </div>
-          <button onClick={onToggle} className="p-1 hover:bg-gray-700 rounded">
-            <ChevronDown className="w-4 h-4 text-gray-400" />
+          <button
+            onClick={onToggle}
+            className="p-2 rounded-full bg-[#9fe870] text-[#163300] transition-all hover:scale-105 active:scale-95"
+          >
+            <ChevronDown className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="px-4 py-2 bg-gray-850 border-b border-gray-700">
-          <div className="flex items-center justify-between">
+        <div className="px-6 py-4 bg-[#e8ebe6] border-b border-[rgba(14,15,12,0.12)]">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-400">Status:</span>
-              <span className="text-sm text-cyan-400 truncate max-w-[180px]">{currentStep || 'Ready'}</span>
+              <span className="text-sm text-[#868685]">Status:</span>
+              <span className="text-base font-semibold text-[#163300] truncate max-w-[180px]">
+                {currentStep || 'Ready'}
+              </span>
             </div>
-            <span className="text-sm text-gray-400">{progress}%</span>
+            <span className="text-base font-semibold text-[#0e0f0c]">{progress}%</span>
           </div>
-          <div className="mt-2 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-2 bg-[rgba(22,51,0,0.08)] rounded-full overflow-hidden">
             <div
-              className="h-full bg-green-500 transition-all duration-300 ease-out"
+              className="h-full bg-[#9fe870] transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -99,25 +104,24 @@ export function GenerationTerminal({
 
         <div
           ref={scrollRef}
-          className="h-80 overflow-y-auto p-4 font-mono text-xs"
-          style={{ backgroundColor: '#1a1a1a' }}
+          className="h-80 overflow-y-auto p-6 bg-[#f5f7f4]"
         >
-          <div className="space-y-1">
+          <div className="space-y-2 font-mono text-sm text-[#454745]">
             {logs.map((log, index) => (
-              <div key={index} className="flex gap-2">
-                <span className="text-gray-500 shrink-0">[{formatTime(log.timestamp)}]</span>
+              <div key={index} className="flex gap-3">
+                <span className="text-[#868685] shrink-0">[{formatTime(log.timestamp)}]</span>
                 <span className={getTypeColor(log.type)}>{log.message}</span>
               </div>
             ))}
             {logs.length === 0 && (
-              <div className="flex gap-2">
-                <span className="text-gray-500 shrink-0">[{formatTime(new Date())}]</span>
-                <span className="text-gray-400">Waiting for generation to start...</span>
+              <div className="flex gap-3">
+                <span className="text-[#868685] shrink-0">[{formatTime(new Date())}]</span>
+                <span className="text-[#868685]">Waiting for generation to start...</span>
               </div>
             )}
-            <div className="flex gap-2">
-              <span className="text-gray-500 shrink-0">[{formatTime(new Date())}]</span>
-              <span className="text-green-400 animate-pulse">▋</span>
+            <div className="flex gap-3">
+              <span className="text-[#868685] shrink-0">[{formatTime(new Date())}]</span>
+              <span className="text-[#163300] animate-pulse">▋</span>
             </div>
           </div>
         </div>

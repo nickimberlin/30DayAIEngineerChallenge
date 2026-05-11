@@ -60,17 +60,20 @@ function unescapeJsonString(str: string): string {
 }
 
 function extractJsonContent(text: string): string | null {
-  const content = extractContentField(text);
+  const modelStart = text.indexOf('model\n');
+  const searchText = modelStart !== -1 ? text.substring(modelStart + 6) : text;
+  
+  const content = extractContentField(searchText);
   if (content) return content;
 
-  const jsonStart = text.indexOf('{');
+  const jsonStart = searchText.indexOf('{');
   if (jsonStart === -1) return null;
 
   let depth = 0;
   let jsonEnd = -1;
-  for (let i = jsonStart; i < text.length; i++) {
-    const ch = text[i];
-    if (ch === '"' && text[i - 1] !== '\\') {
+  for (let i = jsonStart; i < searchText.length; i++) {
+    const ch = searchText[i];
+    if (ch === '"' && searchText[i - 1] !== '\\') {
       continue;
     }
     if (ch === '{') depth++;
@@ -86,7 +89,7 @@ function extractJsonContent(text: string): string | null {
   if (jsonEnd === -1) return null;
 
   try {
-    const parsed = JSON.parse(text.substring(jsonStart, jsonEnd));
+    const parsed = JSON.parse(searchText.substring(jsonStart, jsonEnd));
     if (parsed.content && typeof parsed.content === 'string') {
       return parsed.content;
     }
