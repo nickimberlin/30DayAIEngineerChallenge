@@ -1,0 +1,10 @@
+fastapi==0.115.6
+uvicorn==0.34.0
+pydantic==2.10.5
+qdrant-client==1.12.1
+sentence-transformers==3.3.1
+transformers==4.57.6
+optimum==1.26.2
+python-multipart==0.0.20
+pyyaml==6.0.2
+torch==2.8.0
