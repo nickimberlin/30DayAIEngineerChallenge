@@ -1,0 +1,42 @@
+/* Error: Can't find stylesheet to import.
+ *    ,
+ * 1  | / @use "@carbon/styles" with (
+ * 2  | |   $theme: (
+ * 3  | |     background: #ffffff,
+ * 4  | |     layer-01: #f4f4f4,
+ * 5  | |     layer-02: #e8e8e8,
+ * 6  | |     layer-hover-01: #e8e8e8,
+ * 7  | |     text-primary: #161616,
+ * 8  | |     text-secondary: #525252,
+ * 9  | |     text-subtle: #8c8c8c,
+ * 10 | |     link-primary: #0f62fe,
+ * 11 | |     link-primary-hover: #0043ce,
+ * 12 | |     button-primary: #0f62fe,
+ * 13 | |     button-primary-hover: #0050e0,
+ * 14 | |     button-primary-active: #0030a0,
+ * 15 | |     button-secondary: #161616,
+ * 16 | |     button-tertiary: #0f62fe,
+ * 17 | |     focus: #0f62fe,
+ * 18 | |     border-subtle-00: #e0e0e0,
+ * 19 | |     border-subtle-01: #c6c6c6,
+ * 20 | |     border-interactive: #0f62fe,
+ * 21 | |     support-error: #da1e28,
+ * 22 | |     support-success: #24a148,
+ * 23 | |     support-warning: #f1c21b,
+ * 24 | |     support-info: #0f62fe,
+ * 25 | |   )
+ * 26 | | );
+ *    | '-^
+ *    '
+ *   src/index.scss 1:1  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Can't find stylesheet to import.\a    \2577 \a 1  \2502  \250c  @use \"@carbon/styles\" with (\a 2  \2502  \2502    $theme: (\a 3  \2502  \2502      background: #ffffff,\a 4  \2502  \2502      layer-01: #f4f4f4,\a 5  \2502  \2502      layer-02: #e8e8e8,\a 6  \2502  \2502      layer-hover-01: #e8e8e8,\a 7  \2502  \2502      text-primary: #161616,\a 8  \2502  \2502      text-secondary: #525252,\a 9  \2502  \2502      text-subtle: #8c8c8c,\a 10 \2502  \2502      link-primary: #0f62fe,\a 11 \2502  \2502      link-primary-hover: #0043ce,\a 12 \2502  \2502      button-primary: #0f62fe,\a 13 \2502  \2502      button-primary-hover: #0050e0,\a 14 \2502  \2502      button-primary-active: #0030a0,\a 15 \2502  \2502      button-secondary: #161616,\a 16 \2502  \2502      button-tertiary: #0f62fe,\a 17 \2502  \2502      focus: #0f62fe,\a 18 \2502  \2502      border-subtle-00: #e0e0e0,\a 19 \2502  \2502      border-subtle-01: #c6c6c6,\a 20 \2502  \2502      border-interactive: #0f62fe,\a 21 \2502  \2502      support-error: #da1e28,\a 22 \2502  \2502      support-success: #24a148,\a 23 \2502  \2502      support-warning: #f1c21b,\a 24 \2502  \2502      support-info: #0f62fe,\a 25 \2502  \2502    )\a 26 \2502  \2502  );\a    \2502  \2514 \2500 ^\a    \2575 \a   src/index.scss 1:1  root stylesheet";
+}

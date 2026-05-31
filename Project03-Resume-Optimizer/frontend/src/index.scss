@@ -1,0 +1,96 @@
+@use "@carbon/styles/scss/config" with (
+  $css--font-face: false,
+);
+
+@use "@carbon/styles" with (
+  $theme: (
+    background: #ffffff,
+    layer-01: #f4f4f4,
+    layer-02: #e8e8e8,
+    layer-hover-01: #e8e8e8,
+    text-primary: #161616,
+    text-secondary: #525252,
+    text-subtle: #8c8c8c,
+    link-primary: #0f62fe,
+    link-primary-hover: #0043ce,
+    button-primary: #0f62fe,
+    button-primary-hover: #0050e0,
+    button-primary-active: #0030a0,
+    button-secondary: #161616,
+    button-tertiary: #0f62fe,
+    focus: #0f62fe,
+    border-subtle-00: #e0e0e0,
+    border-subtle-01: #c6c6c6,
+    border-interactive: #0f62fe,
+    support-error: #da1e28,
+    support-success: #24a148,
+    support-warning: #f1c21b,
+    support-info: #0f62fe,
+  )
+);
+
+// Load IBM Plex from Google Fonts (Carbon's built-in @font-face is disabled above)
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap");
+
+:root {
+  --font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  border-radius: 0 !important;
+}
+
+body {
+  font-family: var(--font-family);
+  letter-spacing: 0.16px;
+  background-color: #ffffff;
+  color: #161616;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ── Responsive typography ────────────────────────────────────────
+
+.r-hero-xl  { font-size: 60px; }
+.r-hero-lg  { font-size: 42px; }
+.r-headline { font-size: 32px; }
+.r-score    { font-size: 48px; }
+
+// ── Section padding ──────────────────────────────────────────────
+
+.r-section-top    { padding-top: 96px; }
+.r-section-bottom { padding-bottom: 64px; }
+.r-section-side   { padding-left: 32px; padding-right: 32px; }
+
+// ── Tablet ───────────────────────────────────────────────────────
+
+@media (max-width: 1055px) {
+  .r-hero-xl  { font-size: 42px; letter-spacing: 0; }
+  .r-hero-lg  { font-size: 36px; }
+  .r-headline { font-size: 28px; }
+  .r-score    { font-size: 36px; }
+}
+
+// ── Mobile ───────────────────────────────────────────────────────
+
+@media (max-width: 671px) {
+  .r-hero-xl  { font-size: 32px; }
+  .r-hero-lg  { font-size: 28px; }
+  .r-headline { font-size: 24px; }
+  .r-score    { font-size: 32px; }
+
+  .r-section-top    { padding-top: 48px; }
+  .r-section-bottom { padding-bottom: 48px; }
+  .r-section-side   { padding-left: 16px; padding-right: 16px; }
+}
+
+// ── Scrollable table wrapper ─────────────────────────────────────
+
+.r-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar { height: 4px; }
+  &::-webkit-scrollbar-thumb { background: #c6c6c6; }
+}
